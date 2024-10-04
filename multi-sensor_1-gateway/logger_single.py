@@ -102,8 +102,8 @@ class NanoIMUBLEClient:
         devices = await BleakScanner.discover()
         for d in devices:
             local_name = d.name or 'Unknown'
-            if local_name == TARGET_TAG_NAME and (d.advertisement_data.rssi > -85):
-                print(f"RSSI: {d.advertisement_data.rssi}")
+            if local_name == TARGET_TAG_NAME and (d.rssi > -85):
+                print(f"RSSI: {d.rssi}")
                 self._found = True
                 self._device = d
                 print(f'Found Peripheral Device {self._device.address}. Local Name: {local_name}')
@@ -132,10 +132,11 @@ class NanoIMUBLEClient:
                         if self._running and self.newdata:
                             self.save_data()
                             if time.time() - self.last_print_time >= 3:
+                                # Rescan to get updated RSSI
                                 devices = await BleakScanner.discover()
                                 for device in devices:
                                     if device.address == self._device.address:
-                                        print(f"Connected to {self._device.address} with RSSI: {device.rssi}")
+                                        print(f"Connected to {self._device.address} with RSSI: {device.advertisement_data.rssi}")
                                         break
                                 self.last_print_time = time.time()
                             self.newdata = False
