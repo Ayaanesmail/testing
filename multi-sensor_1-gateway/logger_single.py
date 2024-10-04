@@ -102,8 +102,8 @@ class NanoIMUBLEClient:
         devices = await BleakScanner.discover()
         for d in devices:
             local_name = d.name or 'Unknown'
-            if local_name == TARGET_TAG_NAME and (d.rssi > -85):
-                print(f"RSSI: {d.rssi}")
+            if local_name == TARGET_TAG_NAME and (d.advertisement_data.rssi > -85):
+                print(f"RSSI: {d.advertisement_data.rssi}")
                 self._found = True
                 self._device = d
                 print(f'Found Peripheral Device {self._device.address}. Local Name: {local_name}')
