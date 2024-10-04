@@ -1,4 +1,4 @@
-
+i
 import asyncio
 import struct
 import sys
@@ -102,7 +102,7 @@ class NanoIMUBLEClient:
         devices = await BleakScanner.discover()
         for d in devices:
             local_name = d.name or 'Unknown'
-            if local_name == TARGET_TAG_NAME and (d.rssi > -85):
+            if local_name == TARGET_TAG_NAME and (d.rssi > -70):
                 print(f"RSSI: {d.rssi}")
                 self._found = True
                 self._device = d
@@ -131,13 +131,9 @@ class NanoIMUBLEClient:
                     while self._connected:
                         if self._running and self.newdata:
                             self.save_data()
-                            if time.time() - self.last_print_time >= 3:
-                                # Rescan to get updated RSSI
-                                devices = await BleakScanner.discover()
-                                for device in devices:
-                                    if device.address == self._device.address:
-                                        print(f"Connected to {self._device.address} with RSSI: {device.advertisement_data.rssi}")
-                                        break
+                            if time.time() - self.last_print_time >= 3:  # Print every second
+                                print(f"Connected: {self._client.is_connected}")
+                                #self.print_newdata()
                                 self.last_print_time = time.time()
                             self.newdata = False
                         if not self._client.is_connected:
