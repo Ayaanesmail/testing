@@ -131,9 +131,12 @@ class NanoIMUBLEClient:
                     while self._connected:
                         if self._running and self.newdata:
                             self.save_data()
-                            if time.time() - self.last_print_time >= 3:  # Print every second
-                                print(f"Connected to {self._device.address} with RSSI: {self._device.rssi}")
-                                #self.print_newdata()
+                            if time.time() - self.last_print_time >= 3:
+                                devices = await BleakScanner.discover()
+                                for device in devices:
+                                    if device.address == self._device.address:
+                                        print(f"Connected to {self._device.address} with RSSI: {device.rssi}")
+                                        break
                                 self.last_print_time = time.time()
                             self.newdata = False
                         if not self._client.is_connected:
