@@ -109,7 +109,7 @@ class NanoIMUBLEClient:
         devices = await BleakScanner.discover(adapter="hci0")
         for d in devices:
             local_name = d.name or 'Unknown'
-            if local_name == TARGET_TAG_NAME and (d.rssi > -70):
+            if local_name == TARGET_TAG_NAME and (d.rssi > -80):
                 print(f"RSSI: {d.rssi}")
                 self._found = True
                 self._device = d
@@ -167,6 +167,7 @@ class NanoIMUBLEClient:
             except Exception as e:
                 print(f"Disconnection failed: {e}")
             finally:
+                self.log_disconnect()
                 print("Finished Disconnect routine")
                 try:
                     self.move_file()
@@ -371,6 +372,14 @@ class NanoIMUBLEClient:
         else:
             print(f"Failed to connect after {max_retries} attempts.")
 
+    def log_disconnect(self):
+        # Get the current date and time
+        path = 'disconnect_log.txt'
+        current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        device = self._device.address
+        # Open the file in append mode and write the current date and time
+        with open(path, 'a') as file:
+            file.write("Device: " + str(device) + " @ " + current_datetime + '\n')
 
 async def run():
     global imu_client
