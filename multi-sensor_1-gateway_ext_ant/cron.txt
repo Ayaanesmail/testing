@@ -1,0 +1,24 @@
+1. SSH into raspberry pi
+2. write the following command:
+$ crontab -e
+
+
+
+3. This will open up a crontab file, in here, write the 3 lines with each line referencing a certain script to be executed when the RPI is booted during start
+
+
+
+@reboot cd /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/ && /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/venv/bin/python3 /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/logger_single_ant.py &
+
+@reboot cd /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/ && /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/venv/bin/python3 /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/logger_single2_ant.py &
+
+
+@reboot cd /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/ && /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/venv/bin/python3 /home/fallyx/testing/multi-sensor_1-gateway_ext_ant/send_to_api.py &
+
+
+
+4. copy past the above. Make sure at the end, leave one line of space before saving
+
+5. To save, press CTRL + X. Then Press Y. Then press ENTER. (this will take you back to the rpi terminal)
+
+6. Sudo reboot the rpi
