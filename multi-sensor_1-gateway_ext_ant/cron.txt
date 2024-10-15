@@ -22,3 +22,5 @@ $ crontab -e
 5. To save, press CTRL + X. Then Press Y. Then press ENTER. (this will take you back to the rpi terminal)
 
 6. Sudo reboot the rpi
+
+ps aux | grep python
